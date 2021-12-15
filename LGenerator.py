@@ -14,12 +14,16 @@ def generate_username():
 def generate_email():
     return ''.join(random.choice(string.ascii_letters.lower()) for y in range(random.randint(6, 9)))+"@gmail.com"
 
+def delete_captchas():
+    for captcha in os.listdir('captchas/'):
+        os.remove(f'captchas/{captcha}')
+
 solver = TwoCaptcha(open('apikey.txt').read())
 
 with requests.Session() as client:
     print(f'Registrando {registrar_vezes} contas.')
     for x in range(registrar_vezes):
-        
+
         username = generate_username()
         email = generate_email()
 
@@ -64,3 +68,4 @@ with requests.Session() as client:
             print(f'[{contas_registradas}] Conta Registrada! Usuário: {username} - Senha: {password} - Código Captcha: {captcha_code}')
             client.get("https://www.habblet.city/logout")
         sleep(1)
+    delete_captchas()
